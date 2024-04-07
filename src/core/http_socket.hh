@@ -1,0 +1,5 @@
+namespace Kirmada {
+class HttpSocket {
+    
+};
+}
