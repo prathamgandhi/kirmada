@@ -31,8 +31,8 @@ class ServerSocketBase : public SocketBase {
         int conn_sockfd;
     public:
         ServerSocketBase(int port, SocketType type = TCP, const char *host = NULL);
-        ~ServerSocketBase();
         void acceptConnection();
+        void closeConnection();
 };
 
 }

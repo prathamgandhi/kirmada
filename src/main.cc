@@ -1,12 +1,9 @@
 #include <iostream>
-#include "core/http_socket.hh"
+#include "core/http_server.hh"
 
 int main()
 {
-    Kirmada::HttpSocket s(3008);
-    s.acceptConnection();
-    std::string data;
-    s.recvData(data);
-    std::cout << data;
+    Kirmada::HttpServer s(8008);
+    s.start();
     return 0;    
 }

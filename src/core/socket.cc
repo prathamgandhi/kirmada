@@ -76,7 +76,7 @@ void Kirmada::ServerSocketBase::acceptConnection()
     conn_sockfd = accept(sockfd, (struct sockaddr *)&incoming_addr, &addr_size);
 }
 
-Kirmada::ServerSocketBase::~ServerSocketBase()
+void Kirmada::ServerSocketBase::closeConnection()
 {
     close(conn_sockfd);
 }
