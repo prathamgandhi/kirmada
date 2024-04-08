@@ -27,13 +27,12 @@ class ServerSocketBase : public SocketBase {
     private:
         struct sockaddr_storage incoming_addr;
         socklen_t addr_size = sizeof incoming_addr;
+    protected:
         int conn_sockfd;
     public:
         ServerSocketBase(int port, SocketType type = TCP, const char *host = NULL);
         ~ServerSocketBase();
         void acceptConnection();
-        virtual bool sendData() = 0;
-        virtual bool recvData() = 0;
 };
 
 }
