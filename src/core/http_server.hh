@@ -7,6 +7,8 @@ class HttpServer
     private:
         HttpSocket *socket;
 
+        std::string serverRoot;
+
         class HttpRequest {
             public : 
             std::string method;
@@ -15,7 +17,7 @@ class HttpServer
             std::unordered_map<std::string, std::string> headers;
         };
     public:
-        HttpServer(int port, const char *host = NULL);
+        HttpServer(int port, std::string serverRoot = "", const char *host = NULL);
         ~HttpServer();
         void start();
         const HttpRequest parseHttpRequest(std::string &requestBody);

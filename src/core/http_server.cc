@@ -1,12 +1,17 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <fstream>
 
 #include <core/http_server.hh>
 
-Kirmada::HttpServer::HttpServer(int port, const char *host)
+Kirmada::HttpServer::HttpServer(int port, std::string serverRoot, const char *host)
 {
     socket = new HttpSocket(port, host);
+    if (serverRoot == "") {
+        serverRoot = "/home/pratham/www";
+    }
+    this->serverRoot = serverRoot;
 }
 
 Kirmada::HttpServer::~HttpServer()
@@ -21,9 +26,25 @@ void Kirmada::HttpServer::start()
         std::string data;
         socket->recvData(data);
         HttpRequest httpRequest = parseHttpRequest(data);
-        std::string response = httpRequest.protocol + " 200 OK \r\n\r\nRequested path: " + httpRequest.path + "\r\n";
+        if (httpRequest.path == "/") {
+            httpRequest.path = "/index.html";
+        }
+        std::string requestPath = serverRoot + httpRequest.path;
+        std::ifstream requestFilePath(requestPath, std::ios::binary);
+        if (!requestFilePath.is_open()) {
+            fprintf(stderr, "Failed to open file : not found at %s\n", requestPath);
+            std::string failedResponse = httpRequest.protocol + " 404 Not Found \r\n\r\n";
+            socket->sendData(failedResponse);
+            std::cout << failedResponse << std::endl;
+            socket->closeConnection();
+            continue;
+        }
+        std::stringstream fileBuffer;
+        fileBuffer << requestFilePath.rdbuf();
+        requestFilePath.close();
+        std::string fileBufferString = fileBuffer.str();
+        std::string response = httpRequest.protocol + " 200 OK \r\n\r\n" + fileBufferString;
         socket->sendData(response);
-        std::cout << response << std::endl;
         socket->closeConnection();
     }
 }
