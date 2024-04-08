@@ -21,7 +21,7 @@ void Kirmada::HttpServer::start()
         std::string data;
         socket->recvData(data);
         HttpRequest httpRequest = parseHttpRequest(data);
-        std::string response = httpRequest.protocol + " 200 OK \r\n\rRequested path: " + httpRequest.path + "\r\n";
+        std::string response = httpRequest.protocol + " 200 OK \r\n\r\nRequested path: " + httpRequest.path + "\r\n";
         socket->sendData(response);
         std::cout << response << std::endl;
         socket->closeConnection();
